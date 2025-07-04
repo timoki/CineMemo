@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1031860676935",
+    "project_id": "cinememo-74bb2",
+    "storage_bucket": "cinememo-74bb2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031860676935:android:cc25e8d43f46fc62efc462",
+        "android_client_info": {
+          "package_name": "com.example.cine_memo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-BV3BuCm9kbb5p6TrtKBBUU6fVFvD5Cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
