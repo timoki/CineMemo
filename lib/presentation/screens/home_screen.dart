@@ -1,3 +1,4 @@
+import 'package:cine_memo/presentation/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,19 +15,18 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('CineMemo - 인기 영화')),
       body: popularMovies.when(
         data: (movies) {
-          return ListView.builder(
+          return GridView.builder(
+            padding: const EdgeInsets.all(10.0),
+            // 그리드의 한줄에 몇 개의 아이템을 보여줄지 설정
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // 한줄에 2개
+              childAspectRatio: 0.7, // 아이템의 가로세로 비율(가로 기준 세로 높이 결정
+              crossAxisSpacing: 10.0, // 아이템 간의 가로 간격
+              mainAxisSpacing: 10.0, // 아이템 간의 세로 간격
+            ),
             itemCount: movies.length,
             itemBuilder: (context, index) {
-              final movie = movies[index];
-              return ListTile(
-                leading: Image.network(movie.posterPath),
-                title: Text(movie.title),
-                subtitle: Text(
-                  movie.overview,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              );
+              return MovieCard(movie: movies[index]);
             },
           );
         },
