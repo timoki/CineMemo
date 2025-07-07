@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends StatelessWidget {
+import '../auth_gate.dart';
+
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
         child: Column(
@@ -19,7 +22,7 @@ class LoginScreen extends StatelessWidget {
               icon: const Icon(Icons.login),
               label: const Text('Google 계정으로 로그인'),
               onPressed: () {
-                // TODO: 로그인 로직 연결
+                ref.read(authRepositoryProvider).signInWithGoogle();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
