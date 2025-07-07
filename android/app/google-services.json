@@ -12,7 +12,20 @@
           "package_name": "com.example.cine_memo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1031860676935-fvn1pqcu6csudnj0ev9cucmngk01hbfv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cine_memo",
+            "certificate_hash": "fabc3950b5027da521b56e747e6a2970a6c3b1bd"
+          }
+        },
+        {
+          "client_id": "1031860676935-qrpdrmggi4qnapff3cabaftmq3tgucf7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC-BV3BuCm9kbb5p6TrtKBBUU6fVFvD5Cs"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031860676935-qrpdrmggi4qnapff3cabaftmq3tgucf7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1031860676935-lcai4j5p01dt4tm8lj3ofu2r42btt38o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cineMemo"
+              }
+            }
+          ]
         }
       }
     }

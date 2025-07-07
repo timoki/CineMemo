@@ -2,6 +2,7 @@ import 'package:cine_memo/presentation/widgets/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../auth_gate.dart';
 import '../view_models/movie_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -12,7 +13,17 @@ class HomeScreen extends ConsumerWidget {
     final popularMovies = ref.watch(popularMoviesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('CineMemo - 인기 영화')),
+      appBar: AppBar(
+        title: const Text('CineMemo - 인기 영화'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              ref.read(authRepositoryProvider).signOut();
+            },
+          ),
+        ],
+      ),
       body: popularMovies.when(
         data: (movies) {
           return GridView.builder(
