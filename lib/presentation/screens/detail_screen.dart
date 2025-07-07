@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/movie_entity.dart';
+import 'edit_memo_screen.dart';
 
 class DetailScreen extends StatelessWidget {
   final MovieEntity movie;
@@ -111,10 +112,91 @@ class DetailScreen extends StatelessWidget {
                   style: const TextStyle(fontSize: 16.0),
                 ),
               ),
+              // 구분선
+              const Divider(
+                height: 30,
+                thickness: 1,
+                indent: 16,
+                endIndent: 16,
+              ),
+              // 메모 영역
+              _buildMemoSection(context, user, movie),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+Widget _buildMemoSection(BuildContext context, User user, MovieEntity movie) {
+  // 현재 사용자와 현재 영화에 해당하는 메모를 찾는 쿼리
+  final memoStream = FirebaseFirestore.instance
+      .collection('memos')
+      .where('uid', isEqualTo: user.uid)
+      .where('movieId', isEqualTo: movie.id)
+      .limit(1)
+      .snapshots();
+
+  return StreamBuilder<QuerySnapshot>(
+    stream: memoStream,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      // 아직 작성된 메모가 없는 경우
+      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        return Center(
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.edit),
+            label: const Text('나만의 메모 작성하기'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => EditMemoScreen(movieId: movie.id),
+                ),
+              );
+            },
+          ),
+        );
+      }
+
+      // 작성된 메모가 있는 경우
+      final memoDoc = snapshot.data!.docs.first;
+      final memoText = memoDoc['text'];
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  '나의 메모',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                TextButton(
+                  child: const Text('수정하기'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            EditMemoScreen(movieId: movie.id, memoDoc: memoDoc),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(memoText, style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+      );
+    },
+  );
 }
