@@ -1,18 +1,24 @@
+import 'package:cine_memo/core/res/strings.dart';
+import 'package:cine_memo/presentation/view_models/memos_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditMemoScreen extends StatefulWidget {
+import '../../core/res/app_values.dart';
+import '../view_models/user_data_provider.dart';
+
+class EditMemoScreen extends ConsumerStatefulWidget {
   final int movieId;
   final DocumentSnapshot? memoDoc; // 수정할 메모 문서 (없으면 새 메모)
 
   const EditMemoScreen({super.key, required this.movieId, this.memoDoc});
 
   @override
-  State<EditMemoScreen> createState() => _EditMemoScreenState();
+  ConsumerState<EditMemoScreen> createState() => _EditMemoScreenState();
 }
 
-class _EditMemoScreenState extends State<EditMemoScreen> {
+class _EditMemoScreenState extends ConsumerState<EditMemoScreen> {
   late final TextEditingController _textController;
 
   @override
@@ -41,22 +47,15 @@ class _EditMemoScreenState extends State<EditMemoScreen> {
       return;
     }
 
-    final memoData = {
-      'uid': user.uid,
-      'movieId': widget.movieId,
-      'text': memoText,
-      'timestamp': FieldValue.serverTimestamp(),
-    };
-
-    if (widget.memoDoc != null) {
-      // 수정 모드: 기존 문서 업데이트
-      await widget.memoDoc!.reference.update(memoData);
-    } else {
-      // 작성 모드: 새 문서 추가
-      await FirebaseFirestore.instance.collection('memos').add(memoData);
-    }
+    await ref.read(saveMemoUseCaseProvider)(
+      uid: user.uid,
+      movieId: widget.movieId,
+      text: _textController.text,
+      docRef: widget.memoDoc?.reference,
+    );
 
     if (mounted) {
+      ref.invalidate(memosViewModelProvider);
       Navigator.pop(context);
     }
   }
@@ -65,19 +64,21 @@ class _EditMemoScreenState extends State<EditMemoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.memoDoc == null ? '메모 작성' : '메모 수정'),
+        title: Text(
+          widget.memoDoc == null ? AppStrings.writeMemo : AppStrings.editMemo,
+        ),
         actions: [
           IconButton(icon: const Icon(Icons.save), onPressed: _saveMemo),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppDimens.defaultPadding),
         child: TextField(
           controller: _textController,
           maxLines: null, // 여러 줄 입력 가능
           expands: true, // 화면 전체 사용
           decoration: const InputDecoration(
-            hintText: '영화에 대한 감상을 자유롭게 남겨보세요...',
+            hintText: AppStrings.writeMemoHint,
             border: InputBorder.none,
           ),
         ),

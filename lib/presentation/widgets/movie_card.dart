@@ -1,6 +1,8 @@
 import 'package:cine_memo/domain/entities/movie_entity.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/res/app_values.dart';
+import '../../core/router/app_router.dart';
 import '../screens/detail_screen.dart';
 
 class MovieCard extends StatelessWidget {
@@ -14,7 +16,7 @@ class MovieCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DetailScreen(movie: movie)),
+          AppRouter.createSharedAxisRoute(page: DetailScreen(movie: movie)),
         );
       },
       child: Card(
@@ -52,7 +54,7 @@ class MovieCard extends StatelessWidget {
               child: Text(
                 movie.title,
                 style: const TextStyle(
-                  fontSize: 16.0,
+                  fontSize: AppDimens.defaultTextSize,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 1,

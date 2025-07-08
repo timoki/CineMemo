@@ -1,5 +1,7 @@
 import 'package:cine_memo/presentation/screens/home_screen.dart';
 import 'package:cine_memo/presentation/screens/login_screen.dart';
+import 'package:cine_memo/presentation/screens/main_screen.dart';
+import 'package:cine_memo/presentation/view_models/auth_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,16 +9,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../data/repositories/auth_repository_impl.dart';
 import '../domain/repositories/auth_repository.dart';
-
-// FirebaseAuth의 인증 상태 변경을 스트림으로 제공하는 Provider
-final authStateProvider = StreamProvider<User?>((ref) {
-  return FirebaseAuth.instance.authStateChanges();
-});
-
-// AuthRepository 제공 Provider 추가
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepositoryImpl(FirebaseAuth.instance);
-});
 
 class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
@@ -30,7 +22,7 @@ class AuthGate extends ConsumerWidget {
       data: (user) {
         // user 객체가 있으면 (로그인 상태) HomeScreen을 보여줌
         if (user != null) {
-          return const HomeScreen();
+          return const MainScreen();
         }
         // user 객체가 없으면 (로그아웃 상태) LoginScreen을 보여줌
         else {

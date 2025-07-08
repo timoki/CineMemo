@@ -1,4 +1,6 @@
-import 'package:cine_memo/presentation/auth_gate.dart';
+import 'package:cine_memo/core/res/strings.dart';
+import 'package:cine_memo/core/theme/app_theme.dart';
+import 'package:cine_memo/presentation/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,9 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CineMemo',
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: const AuthGate(),
+      title: AppStrings.appName,
+      theme: AppTheme.lightTheme,
+      home: const SplashScreen(),
     );
   }
 }

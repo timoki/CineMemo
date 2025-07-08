@@ -25,4 +25,15 @@ class MovieRepositoryImpl implements MovieRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<MovieEntity> getMovieDetailById(int movieId) async {
+    try {
+      final response = await dioClient.get("$apiRoute$movieId");
+      return MovieModel.fromJson(response.data).toEntity();
+    } catch (e) {
+      print("Error fetching movie detail: $e");
+      rethrow;
+    }
+  }
 }

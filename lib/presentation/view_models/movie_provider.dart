@@ -4,6 +4,9 @@ import 'package:cine_memo/domain/repositories/movie_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/entities/movie_entity.dart';
+import '../../domain/usecases/get_popular_movies_usecase.dart';
+
 // 1. Dio Provider: Dio 인스턴스를 제공
 final dioProvider = Provider<Dio>((ref) => Dio());
 
@@ -17,8 +20,14 @@ final movieRepositoryProvider = Provider<MovieRepository>(
   (ref) => MovieRepositoryImpl(ref.watch(dioClientProvider)),
 );
 
-// 4. FutureProvider: getPopularMovies 함수를 비동기적으로 호출하고 그 결과를 제공
-final popularMoviesProvider = FutureProvider((ref) {
-  // movieRepositoryProvider를 읽어서(watch) getPopularMovies 함수 호출
-  return ref.watch(movieRepositoryProvider).getPopularMovies();
+final getPopularMoviesUseCaseProvider = Provider<GetPopularMoviesUseCase>((
+  ref,
+) {
+  // movieRepositoryProvider에 의존
+  final repository = ref.watch(movieRepositoryProvider);
+  return GetPopularMoviesUseCase(repository);
+});
+
+final popularMoviesProvider = FutureProvider<List<MovieEntity>>((ref) {
+  return ref.watch(getPopularMoviesUseCaseProvider)(); // .call()은 생략 가능
 });
